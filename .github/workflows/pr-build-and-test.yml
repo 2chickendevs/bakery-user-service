@@ -1,6 +1,8 @@
-name: Build and Test On PR
+name: Build and Test On PRs
 
 on:
+  push:
+    branches: [ "main" ] 
   pull_request:
     branches: [ "main" ]
 
@@ -26,5 +28,8 @@ jobs:
       - name: Update the settings.yml file
         run: cat deploy/settings.xml > $HOME/.m2/settings.xml
 
-      - name: Build with Maven
+      - name: Install
         run: mvn clean install
+
+      - name: Test
+        run: mvn test

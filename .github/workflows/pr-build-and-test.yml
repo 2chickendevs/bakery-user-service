@@ -23,10 +23,11 @@ jobs:
           distribution: 'temurin'
           cache: maven
 
+      - name: Set up Maven settings
+        run: echo "${{ secrets.M2 }}" > $HOME/.m2/settings.xml
+
       - name: Build with Maven
-        env:
-          M22: ${{ secrets.M2 }}
-        run: echo "M22 is $M22 ${{ secrets.M2 }}"
+        run: mvn clean install
 
 #        - name: Run tests with Maven
 #          run: mvn clean install

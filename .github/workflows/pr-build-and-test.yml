@@ -17,7 +17,7 @@ jobs:
           java-version: "25"
           distribution: "temurin"
           cache: maven
-          server-id: bakery-parent-lib                
+          server-id: github       
           server-username: GITHUB_ACTOR
           server-password: GITHUB_TOKEN
       - run: mvn -B verify

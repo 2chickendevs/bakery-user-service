@@ -23,21 +23,8 @@ jobs:
           distribution: 'temurin'
           cache: maven
 
-      - name: Login to GitHub Container Registry
-        uses: docker/login-action@v1
-        with:
-          registry: ghcr.io
-          username: ${{ github.repository_owner }}
-          password: ${{ secrets.GHRC_TOKEN }}
-
-      - name: replace
+      - name: Update the settings.yml file
         run: cat deploy/settings.xml > $HOME/.m2/settings.xml
-
-      - name: log
-        run: cat $HOME/.m2/settings.xml
 
       - name: Build with Maven
         run: mvn clean install
-
-#        - name: Run tests with Maven
-#          run: mvn clean install

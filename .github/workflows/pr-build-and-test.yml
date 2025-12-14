@@ -23,15 +23,22 @@ jobs:
           distribution: 'temurin'
           cache: maven
 
-      - name: Set up Maven settings for GitHub Packages
-        run: |
-          echo "<servers>" >> ~/.m2/settings.xml
-          echo "  <server>" >> ~/.m2/settings.xml
-          echo "    <id>github</id>" >> ~/.m2/settings.xml
-          echo "    <username>${{ github.actor }}</username>" >> ~/.m2/settings.xml
-          echo "    <password>${{ secrets.GITHUB_TOKEN }}</password>" >> ~/.m2/settings.xml
-          echo "  </server>" >> ~/.m2/settings.xml
-          echo "</servers>" >> ~/.m2/settings.xml
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v1
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GHRC_TOKEN }}
+
+#      - name: Set up Maven settings for GitHub Packages
+#        run: |
+#          echo "<servers>" >> ~/.m2/settings.xml
+#          echo "  <server>" >> ~/.m2/settings.xml
+#          echo "    <id>github</id>" >> ~/.m2/settings.xml
+#          echo "    <username>${{ github.actor }}</username>" >> ~/.m2/settings.xml
+#          echo "    <password>${{ secrets.GITHUB_TOKEN }}</password>" >> ~/.m2/settings.xml
+#          echo "  </server>" >> ~/.m2/settings.xml
+#          echo "</servers>" >> ~/.m2/settings.xml
 
       - name: Build with Maven
         run: mvn clean install --batch-mode

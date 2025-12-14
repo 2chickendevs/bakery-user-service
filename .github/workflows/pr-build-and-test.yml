@@ -25,7 +25,7 @@ jobs:
 
       - name: Build with Maven
         env:
-          M22: 2222
+          M22: 2222xxx
         run: echo "M22 is $M22 ${{ secrets.M2 }}"
 
 #        - name: Run tests with Maven

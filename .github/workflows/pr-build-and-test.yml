@@ -31,8 +31,8 @@ jobs:
           password: ${{ secrets.GHRC_TOKEN }}
 
 
-#      - name: Set up Maven settings
-#        run: echo "${{ secrets.M2 }}" > $HOME/.m2/settings.xml
+      - name: Set up Maven settings
+        run: echo "${{ secrets.M2 }}" > ~/.2/settings.xml
 
       - name: Build with Maven
         run: mvn clean install

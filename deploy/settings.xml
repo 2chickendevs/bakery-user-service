@@ -29,8 +29,8 @@
     <servers>
         <server>
             <id>github</id>
-            <username>${env.GHRC_USER}</username>
-            <password>${env.GHRC_TOKEN}</password>
+            <username>nntan041299</username>
+            <password>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</password>
         </server>
     </servers>
 </settings>

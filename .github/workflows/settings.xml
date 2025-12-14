@@ -1,57 +1,36 @@
 <settings xmlns="http://maven.apache.org/SETTINGS/1.0.0"
           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-          xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0 http://maven.apache.org/xsd/settings-1.0.0.xsd">
+          xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0
+                      http://maven.apache.org/xsd/settings-1.0.0.xsd">
 
-<!--
-    Servers section: Defines authentication credentials.
-    The 'id' here must match the 'id' used in the repositories section below.
-  -->
-  <servers>
-    <server>
-      <id>github</id>
-      <!-- When used locally, put your username and PAT here -->
-      <username>${GITHUB_ACTOR}</username>
-      <!-- A Personal Access Token (PAT) with 'read:packages' scope -->
-      <password>${GITHUB_TOKEN}</password>
-    </server>
-  </servers>
+    <activeProfiles>
+        <activeProfile>github</activeProfile>
+    </activeProfiles>
 
-  <!--
-    Profiles section: Defines the location of the GitHub Packages repository.
-  -->
-  <profiles>
-    <profile>
-      <id>github</id>
-      <repositories>
-        <repository>
-          <id>github</id>
-          <url>maven.pkg.github.com</url>
-          <snapshots>
-            <!-- Set to true if you use snapshot versions of your packages -->
-            <enabled>true</enabled>
-          </snapshots>
-        </repository>
-        <!-- 
-          Maven Central is used by default even if not listed here, 
-          but you can explicitly list it if needed:
-        <repository>
-            <id>central</id>
-            <url>repo.maven.apache.org</url>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-        </repository>
-        -->
-      </repositories>
-    </profile>
-  </profiles>
+    <profiles>
+        <profile>
+            <id>github</id>
+            <repositories>
+                <repository>
+                    <id>central</id>
+                    <url>https://repo.maven.apache.org/maven2</url>
+                </repository>
+                <repository>
+                    <id>github</id>
+                    <url>https://maven.pkg.github.com/2chickendevs/bakery-parent-lib</url>
+                    <snapshots>
+                        <enabled>true</enabled>
+                    </snapshots>
+                </repository>
+            </repositories>
+        </profile>
+    </profiles>
 
-  <!--
-    ActiveProfiles section: Automatically activates the 'github' profile 
-    so you don't need to pass '-Pgithub' on the command line.
-  -->
-  <activeProfiles>
-    <activeProfile>github</activeProfile>
-  </activeProfiles>
-  
+    <servers>
+        <server>
+            <id>github</id>
+            <username>${env.GITHUB_ACTOR}</username>
+            <password>${env.GITHUB_TOKEN}</password>
+        </server>
+    </servers>
 </settings>

@@ -20,4 +20,5 @@ jobs:
           server-id: github       
           server-username: GITHUB_ACTOR
           server-password: GITHUB_TOKEN
+          settings-path: ${{ github.workspace }}
       - run: mvn -B verify

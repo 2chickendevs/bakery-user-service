@@ -1,0 +1,57 @@
+server:
+  servlet:
+    context-path: /bakery-user-service/api
+
+# DATABASE
+db:
+  host: localhost
+  port: 5432
+  name: bakery-user-db
+  username: admin
+  password: admin
+
+spring:
+  datasource:
+    url: jdbc:postgresql://${db.host}:${db.port}/${db.name}
+    username: ${db.username}
+    password: ${db.password}
+
+  jpa:
+    hibernate:
+      ddl-auto: none
+    show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        default_schema: public
+        format_sql: true
+
+  servlet:
+    multipart:
+      max-file-size: 200MB
+      max-request-size: 250MB
+
+flyway:
+  enabled: true
+  baseline-on-migrate: true
+  schemas: public
+  url: jdbc:postgresql://${db.host}:${db.port}/${db.name}
+  userEntity: ${db.username}
+  password: ${db.password}
+
+# APPLICATION
+allowed:
+  urls: http://localhost:3000
+
+jwt:
+  secret: "=========================123abcdef123abcdef123========================="
+  expiration-ms: 86400000
+
+logging:
+  level:
+    org:
+      hibernate:
+        SQL: debug
+        orm:
+          jdbc:
+            bind: trace

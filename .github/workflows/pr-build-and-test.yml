@@ -30,9 +30,11 @@ jobs:
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GHRC_TOKEN }}
 
+      - name: replace
+        run: cat deploy/settings.xml > $HOME/.m2/settings.xml
 
-      - name: log aaaa
-        run: ls
+      - name: log
+        run: cat $HOME/.m2/settings.xml
 
       - name: Build with Maven
         run: mvn clean install

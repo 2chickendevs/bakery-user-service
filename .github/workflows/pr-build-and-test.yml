@@ -17,15 +17,14 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Set up Java 25
+        env:
+          M22: ${{ secrets.M2 }}
         uses: actions/setup-java@v4
         with:
           java-version: '25'
           distribution: 'temurin'
           cache: maven
-
-        run: |
-          echo "M2 is: $M2"
-          echo "M2 from secrets: ${{ secrets.M2 }}"
+        run: echo "M22 is $MM22"
 
       - name: Build with Maven
         run: mvn clean install --batch-mode

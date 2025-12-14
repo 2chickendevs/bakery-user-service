@@ -1,0 +1,57 @@
+<settings xmlns="maven.apache.org"
+  xmlns:xsi="www.w3.org"
+  xsi:schemaLocation="maven.apache.org maven.apache.org">
+  
+  <!--
+    Servers section: Defines authentication credentials.
+    The 'id' here must match the 'id' used in the repositories section below.
+  -->
+  <servers>
+    <server>
+      <id>github</id>
+      <!-- When used locally, put your username and PAT here -->
+      <username>${GITHUB_ACTOR}</username>
+      <!-- A Personal Access Token (PAT) with 'read:packages' scope -->
+      <password>${GITHUB_TOKEN}</password>
+    </server>
+  </servers>
+
+  <!--
+    Profiles section: Defines the location of the GitHub Packages repository.
+  -->
+  <profiles>
+    <profile>
+      <id>github</id>
+      <repositories>
+        <repository>
+          <id>github</id>
+          <url>maven.pkg.github.com</url>
+          <snapshots>
+            <!-- Set to true if you use snapshot versions of your packages -->
+            <enabled>true</enabled>
+          </snapshots>
+        </repository>
+        <!-- 
+          Maven Central is used by default even if not listed here, 
+          but you can explicitly list it if needed:
+        <repository>
+            <id>central</id>
+            <url>repo.maven.apache.org</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+        </repository>
+        -->
+      </repositories>
+    </profile>
+  </profiles>
+
+  <!--
+    ActiveProfiles section: Automatically activates the 'github' profile 
+    so you don't need to pass '-Pgithub' on the command line.
+  -->
+  <activeProfiles>
+    <activeProfile>github</activeProfile>
+  </activeProfiles>
+  
+</settings>

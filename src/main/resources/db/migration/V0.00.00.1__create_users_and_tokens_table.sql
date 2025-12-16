@@ -7,9 +7,9 @@ CREATE TABLE users (
     last_name VARCHAR(255) NOT NULL,
     role VARCHAR(255) NOT NULL,
 
-    created_on TIMESTAMP,
+    created_at TIMESTAMP,
     created_by VARCHAR(50),
-    updated_on TIMESTAMP,
+    updated_at TIMESTAMP,
     updated_by VARCHAR(50)
 );
 
@@ -19,9 +19,9 @@ CREATE TABLE tokens (
     user_id INTEGER NOT NULL,
 	token VARCHAR(255) NOT NULL,
 
-	created_on TIMESTAMP,
+	created_at TIMESTAMP,
     created_by VARCHAR(50),
-    updated_on TIMESTAMP,
+    updated_at TIMESTAMP,
     updated_by VARCHAR(50),
 
     CONSTRAINT unique_tokens_user UNIQUE (user_id, token)

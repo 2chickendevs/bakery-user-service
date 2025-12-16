@@ -22,14 +22,14 @@ public class Auditable {
     private String createdBy;
 
     @CreatedDate
-    @Column(name = "created_on", updatable = false)
-    private Instant createdOn;
+    @Column(name = "created_at", updatable = false)
+    private Instant createdAt;
 
     @LastModifiedBy
     @Column(name = "updated_by")
     private String updatedBy;
 
     @LastModifiedDate
-    @Column(name = "updated_on")
-    private Instant updatedOn;
+    @Column(name = "updated_at")
+    private Instant updatedAt;
 }

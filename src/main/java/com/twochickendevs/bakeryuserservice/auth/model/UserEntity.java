@@ -1,6 +1,6 @@
 package com.twochickendevs.bakeryuserservice.auth.model;
 
-import com.twochickendevs.bakeryuserservice.auth.config.Auditable;
+import com.twochickendevs.bakerycommonlib.model.Auditable;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.Fetch;

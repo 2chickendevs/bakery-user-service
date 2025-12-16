@@ -1,6 +1,6 @@
 package com.twochickendevs.bakeryuserservice.auth.model;
 
-import com.twochickendevs.bakeryuserservice.auth.config.Auditable;
+import com.twochickendevs.bakerycommonlib.model.Auditable;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;

@@ -2,13 +2,27 @@ server:
   servlet:
     context-path: /bakery-user-service/api
   port: 8081
-# DATABASE
+
 db:
   host: localhost
   port: 5432
   name: bakery-user-db
   username: admin
   password: admin
+
+feign:
+  client:
+    config:
+      default:
+        connectTimeout: 5000
+        readTimeout: 5000
+
+app:
+  clients:
+    googleUserInfo:
+      url: https://www.googleapis.com
+    googleOauth2Api:
+      url: https://oauth2.googleapis.com
 
 spring:
   datasource:
@@ -30,6 +44,17 @@ spring:
     multipart:
       max-file-size: 200MB
       max-request-size: 250MB
+
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            url: https://accounts.google.com/o/oauth2/v2/auth
+            client-id: 123123123
+            client-secret: 123123123
+            scope: profile email
+            redirect-uri: http://localhost:8081/bakery-user-service/api/auth/google/getToken
 
 flyway:
   enabled: true

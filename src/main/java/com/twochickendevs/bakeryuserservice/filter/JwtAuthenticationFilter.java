@@ -7,6 +7,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.NoArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -36,7 +37,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         }
 
         String jwt = jwtUtils.parseJwt(request);
-        if (jwtUtils.validate(jwt)) {
+        if (StringUtils.isNoneBlank(jwt) && jwtUtils.validate(jwt)) {
             String username = jwtUtils.getUserName(jwt);
             UserDetails userDetails = userDetailsService.loadUserByUsername(username);
 

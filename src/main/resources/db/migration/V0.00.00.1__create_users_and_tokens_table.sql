@@ -2,7 +2,7 @@ CREATE TABLE users (
     id SERIAL PRIMARY KEY NOT NULL,
 
     username VARCHAR(255) NOT NULL UNIQUE,
-    password VARCHAR(255) NOT NULL,
+    password VARCHAR(255) NULL,
     first_name VARCHAR(255) NOT NULL,
     last_name VARCHAR(255) NOT NULL,
     role VARCHAR(255) NOT NULL,

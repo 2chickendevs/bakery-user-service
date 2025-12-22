@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class TokenService {
 
+    //todo: create the cronjob to delete expired tokens
     private final TokenRepository tokenRepository;
 
     private final JwtUtils jwtUtils;
@@ -23,18 +24,9 @@ public class TokenService {
         if (userEntity.getId() == null || StringUtils.isBlank(userEntity.getUsername())) {
             throw new ValidationException("Can not specify the user");
         }
-        this.removeAllByUser(userEntity.getId());
         final String token = this.initToken(userEntity);
         this.storeToken(token, userEntity);
         return token;
-    }
-
-    private void removeAllByUser(Long userId) {
-        try {
-            tokenRepository.removeAllTokenByUserId(userId);
-        } catch (Exception e) {
-            log.error("Can not remove all token with user [{}]", userId, e);
-        }
     }
 
     private String initToken(UserEntity userEntity) {

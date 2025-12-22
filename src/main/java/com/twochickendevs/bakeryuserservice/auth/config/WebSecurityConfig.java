@@ -44,9 +44,8 @@ public class WebSecurityConfig {
         return new JwtAuthenticationFilter();
     }
 
-
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain filterChain(HttpSecurity http) {
         return http
                 .cors(cors -> {})
                 .csrf(AbstractHttpConfigurer::disable)

@@ -40,6 +40,8 @@ public class UsernamePasswordAuthServiceImpl extends AbstractAuthenticationServi
             throw new ExistingException("User exists with user name " + userDto.getUsername());
         }
 
+        userDto.setGoogleId(null);
+
         UserEntity userEntity = createUser(userDto);
 
         return createToken(userEntity);

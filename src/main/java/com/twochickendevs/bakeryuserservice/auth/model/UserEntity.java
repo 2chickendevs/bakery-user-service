@@ -34,6 +34,9 @@ public class UserEntity extends Auditable implements UserDetails {
     @Column(length = 120)
     private String password;
 
+    @Column(name = "google_id", length = 40)
+    private String googleId;
+
     @Column(name = "first_name", nullable = false, length = 20)
     private String firstName;
 

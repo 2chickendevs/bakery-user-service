@@ -1,8 +1,7 @@
 package com.twochickendevs.bakeryuserservice.utils;
 
-import com.twochickendevs.bakeryuserservice.auth.model.UserEntity;
 import com.twochickendevs.bakerycommonlib.exception.NotFoundException;
-
+import com.twochickendevs.bakeryuserservice.auth.model.UserEntity;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.springframework.security.core.Authentication;

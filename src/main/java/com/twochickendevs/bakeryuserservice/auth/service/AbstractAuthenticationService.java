@@ -36,6 +36,7 @@ public abstract class AbstractAuthenticationService {
         UserEntity userEntity = UserEntity.builder()
                 .id(null).username(userDto.getUsername())
                 .password(StringUtils.isNoneBlank(userDto.getPassword()) ? encoder.encode(userDto.getPassword()) : null)
+                .googleId(userDto.getGoogleId())
                 .firstName(userDto.getFirstName()).lastName(userDto.getLastName())
                 .role(Role.USER).build();
 
@@ -51,7 +52,7 @@ public abstract class AbstractAuthenticationService {
     /**
      * Add user to context, so when add or update database Spring boot can get the user.
      * */
-    private void createTheAuthenticationInSecurityContext(UserEntity userEntity) {
+    protected void createTheAuthenticationInSecurityContext(UserEntity userEntity) {
         SecurityContext context = SecurityContextHolder.createEmptyContext();
         Authentication authentication = new UsernamePasswordAuthenticationToken(userEntity, null,
                 userEntity.getAuthorities());

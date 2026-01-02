@@ -69,7 +69,7 @@ allowed:
   urls: http://localhost:3000
 
 jwt:
-  secret: "=========================123abcdef123abcdef123========================="
+  secret: 123abcdef123abcdef123=========================
   expiration-ms: 86400000
 
 logging:

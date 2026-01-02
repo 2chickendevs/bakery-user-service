@@ -1,6 +1,7 @@
 server:
   servlet:
     context-path: /bakery-user-service/api
+  port: 8081
 
 db:
   host: ${DB_HOST}
@@ -8,6 +9,20 @@ db:
   name: ${DB_NAME}
   username: ${DB_USERNAME}
   password: ${DB_PASSWORD}
+
+feign:
+  client:
+    config:
+      default:
+        connectTimeout: 5000
+        readTimeout: 5000
+
+app:
+  clients:
+    googleUserInfo:
+      url: https://www.googleapis.com
+    googleOauth2Api:
+      url: https://oauth2.googleapis.com
 
 spring:
   datasource:
@@ -28,13 +43,24 @@ spring:
       max-file-size: 200MB
       max-request-size: 250MB
 
-  flyway:
-    enabled: true
-    baseline-on-migrate: true
-    schemas: public
-    url: jdbc:postgresql://${db.host}:${db.port}/${db.name}
-    user: ${db.username}
-    password: ${db.password}
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            url: ${GOOGLE_OAUTH2_URL}
+            client-id: ${GOOGLE_OAUTH2_CLIENT_ID}
+            client-secret: ${GOOGLE_OAUTH2_CLIENT_SECRET}
+            scope: profile email
+            redirect-uri: ${GOOGLE_OAUTH2_REDIRECT_URL}
+
+flyway:
+  enabled: true
+  baseline-on-migrate: true
+  schemas: public
+  url: jdbc:postgresql://${db.host}:${db.port}/${db.name}
+  user: ${db.username}
+  password: ${db.password}
 
 allowed:
   urls:

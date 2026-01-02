@@ -10,6 +10,7 @@ import com.twochickendevs.bakeryuserservice.auth.service.TokenService;
 import com.twochickendevs.bakeryuserservice.client.GoogleTokenRetrieveClient;
 import com.twochickendevs.bakeryuserservice.client.GoogleUserInfoClient;
 import com.twochickendevs.bakeryuserservice.constant.Constant;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
@@ -109,11 +110,33 @@ public class GoogleOauth2Impl extends AbstractAuthenticationService implements I
                 Constant.BEARER + googleToken.getAccessToken());
 
         Optional<UserEntity> userEntityOpt = userRepository.findByUsername(googleUserInfo.getEmail());
-        if (userEntityOpt.isPresent()) {
-            return createToken(userEntityOpt.get());
+        if (userEntityOpt.isEmpty()) {
+            return signUp(googleUserInfo);
         }
 
-        return signUp(googleUserInfo);
+        UserEntity userEntity = userEntityOpt.get();
+        String storedGoogleId = userEntity.getGoogleId();
+        String newGoogleId = googleUserInfo.getId();
+
+        createTheAuthenticationInSecurityContext(userEntity);
+
+        if (newGoogleId == null || (
+                StringUtils.isNotBlank(storedGoogleId) &&
+                !storedGoogleId.equals(googleUserInfo.getId()))
+        ) {
+            throw new IllegalArgumentException("[GoogleLogin] The google id not match");
+        }
+
+        if (StringUtils.isBlank(storedGoogleId)) {
+            updateGoogleId(userEntity, googleUserInfo.getId());
+        }
+
+        return createToken(userEntity);
+    }
+
+    private void updateGoogleId(UserEntity userEntity, String googleId) {
+        userEntity.setGoogleId(googleId);
+        userRepository.save(userEntity);
     }
 
     private String signUp(GoogleUserInfo googleUserInfo) {
@@ -121,6 +144,7 @@ public class GoogleOauth2Impl extends AbstractAuthenticationService implements I
                 .firstName(googleUserInfo.getFirstName())
                 .lastName(googleUserInfo.getLastName())
                 .username(googleUserInfo.getEmail())
+                .googleId(googleUserInfo.getId())
                 .build();
 
         UserEntity userEntity = createUser(userDTO);

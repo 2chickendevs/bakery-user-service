@@ -24,6 +24,9 @@ public class UserDTO {
     @NotBlank
     private String password;
 
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    private String googleId;
+
     @NotBlank
     private String firstName;
 

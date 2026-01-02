@@ -63,8 +63,7 @@ flyway:
   password: ${db.password}
 
 allowed:
-  urls:
-    - ${ALLOWED_ORIGIN:https://your-frontend-domain.com}
+  urls: ${ALLOWED_ORIGIN:https://your-frontend-domain.com}
 
 jwt:
   secret: ${JWT_SECRET}

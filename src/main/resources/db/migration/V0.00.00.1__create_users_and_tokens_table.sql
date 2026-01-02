@@ -18,7 +18,7 @@ CREATE TABLE tokens (
 	id SERIAL PRIMARY KEY NOT NULL,
 
     user_id INTEGER NOT NULL,
-	token VARCHAR(255) NOT NULL,
+	token TEXT NOT NULL,
 
 	created_at TIMESTAMP,
     created_by VARCHAR(50),

@@ -15,7 +15,9 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
 import java.security.Key;
+import java.time.Instant;
 import java.util.Date;
+import java.util.UUID;
 
 @NoArgsConstructor
 @Log4j2
@@ -32,8 +34,11 @@ public class JwtUtils {
     private TokenRepository tokenRepository;
 
     public String generateJwtToken(String username) {
-        return Jwts.builder().setSubject(username).setIssuedAt(new Date())
-                .setExpiration(new Date((new Date()).getTime() + jwtExpirationMs))
+        Instant now = Instant.now();
+        return Jwts.builder().setSubject(username)
+                .setId(UUID.randomUUID().toString())
+                .setIssuedAt(Date.from(Instant.now()))
+                .setExpiration(Date.from(now.plusMillis(jwtExpirationMs)))
                 .signWith(key(), SignatureAlgorithm.HS256).compact();
     }
 

@@ -13,6 +13,5 @@ services:
       - "5432:5432"
     volumes:
       - bakery_user_db:/var/lib/postgresql/data
-
 volumes:
   bakery_user_db:

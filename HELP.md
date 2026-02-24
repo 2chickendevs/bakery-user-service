@@ -14,3 +14,16 @@ While most of the inheritance is fine, it also inherits unwanted elements like `
 To prevent this, the project POM contains empty overrides for these elements.
 If you manually switch to a different parent and actually want the inheritance, you need to remove those overrides.
 
+### Build and push image
+
+* docker build --platform linux/amd64 -t nntan041299/bakery-user-service:latest .
+* docker tag nntan041299/bakery-user-service:latest nntan041299/bakery-user-service:latest
+* docker push nntan041299/bakery-user-service:latest
+
+
+### Terraform
+* cd terraform
+* terraform init
+* terraform plan
+* terraform apply -auto-approve
+* terraform destroy -auto-approve

@@ -1,0 +1,34 @@
+#!/bin/bash
+set -euxo pipefail
+
+apt-get update -y
+apt-get install -y docker.io
+
+systemctl enable docker
+systemctl start docker
+
+# Build env file from Terraform-provided map
+ENV_FILE="/opt/app.env"
+cat > "$ENV_FILE" <<'EOF'
+%{ for k, v in env_all ~}
+${k}=${v}
+%{ endfor ~}
+EOF
+
+chmod 600 "$ENV_FILE"
+
+# Pull latest image
+docker pull ${docker_image}
+
+# Replace container if exists
+docker rm -f app || true
+
+# Run container + send logs to CloudWatch Logs
+docker run -d --restart=always --name app \
+  --env-file "$ENV_FILE" \
+  -p ${app_port}:${app_port} \
+  --log-driver=awslogs \
+  --log-opt awslogs-region=${region} \
+  --log-opt awslogs-group=${log_group} \
+  --log-opt awslogs-stream=app \
+  ${docker_image}

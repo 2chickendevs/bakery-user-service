@@ -1,7 +1,7 @@
 server:
   servlet:
     context-path: /bakery-user-service/api
-  port: 8081
+  port: 8080
 
 db:
   host: localhost

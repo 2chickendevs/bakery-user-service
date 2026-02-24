@@ -76,7 +76,7 @@ public class GoogleOauth2Impl extends AbstractAuthenticationService implements I
 
         cache.put(state, state);
 
-        return UriComponentsBuilder.fromPath(url)
+        return UriComponentsBuilder.fromUriString(url)
                 .queryParam("scope", scope)
                 .queryParam("include_granted_scopes", INCLUDE_GRANTED_SCOPES)
                 .queryParam("response_type", RESPONSE_TYPE)

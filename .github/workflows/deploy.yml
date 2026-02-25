@@ -2,7 +2,7 @@ name: Terraform CI/CD Pipeline
 
 on:
   push:
-    branches: [staging, production]
+    branches: [production]
 
 jobs:
   terraform:
@@ -19,13 +19,11 @@ jobs:
       AWS_ACCESS_KEY_ID: |-
         ${{ case(
           github.ref_name == 'production', secrets.AWS_ACCESS_KEY_ID_PROD,
-          github.ref_name == 'staging', secrets.AWS_ACCESS_KEY_ID_STAGING,
           'unknown'
         ) }}
       AWS_SECRET_ACCESS_KEY: |-
         ${{ case(
           github.ref_name == 'production', secrets.AWS_SECRET_ACCESS_KEY_PROD,
-          github.ref_name == 'staging', secrets.AWS_SECRET_ACCESS_KEY_STAGING,
           'unknown'
         ) }}
 

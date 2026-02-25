@@ -1,7 +1,6 @@
 variable "docker_image" {
   type        = string
   description = "Docker image, e.g. username/repo:tag"
-  default     = "nntan041299/bakery-user-service:latest"
 }
 
 variable "app_port" {
@@ -19,7 +18,7 @@ variable "health_check_path" {
 variable "env" {
   type        = string
   description = "Current deployed environment"
-  default     = "staging"
+  default     = "production"
 }
 
 variable "env_docker" {

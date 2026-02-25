@@ -13,7 +13,7 @@ data "aws_subnet_ids" "default_subnet" {
 # SSM -> env map
 ############################
 data "aws_ssm_parameters_by_path" "app_env" {
-  path            = var.ssm_env_path
+  path            = local.ssm_env_path
   recursive       = true
   with_decryption = true
 }

@@ -10,7 +10,7 @@ systemctl start docker
 # Build env file from Terraform-provided map
 ENV_FILE="/opt/app.env"
 cat > "$ENV_FILE" <<'EOF'
-%{ for k, v in env_all ~}
+%{ for k, v in env_docker_all ~}
 ${k}=${v}
 %{ endfor ~}
 EOF

@@ -9,7 +9,7 @@ resource "aws_instance" "app" {
     docker_image = var.docker_image
     app_port     = var.app_port
     region       = "us-east-1"
-    env_all      = local.env_all
+    env_docker_all      = local.env_docker_all
     log_group    = aws_cloudwatch_log_group.app_logs.name
   })
 

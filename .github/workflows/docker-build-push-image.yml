@@ -1,14 +1,30 @@
-name: Build & Push Docker (develop)
+name: Terraform CI/CD Pipeline
 
 on:
   push:
-    branches: [develop]
+    branches: [production]
 
 jobs:
-  docker:
+  terraform:
     runs-on: ubuntu-latest
+
     permissions:
       contents: read
+      packages: read
+
+    # Avoid repeating working-directory in every terraform step
+    defaults:
+      run:
+        working-directory: terraform
+
+    env:
+      GITHUB_REGISTRY_USER: ${{ secrets.GHRC_USER }}
+      GITHUB_REGISTRY_TOKEN: ${{ secrets.GHRC_TOKEN }}
+
+      TF_VAR_env: ${{ github.ref_name }}
+
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID_PROD }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY_PROD }}
 
     steps:
       - name: Checkout
@@ -23,39 +39,33 @@ jobs:
 
       - name: Maven settings.xml
         run: |
-          mkdir -p $HOME/.m2
-          cat deploy/settings.xml > $HOME/.m2/settings.xml
+          mkdir -p "$HOME/.m2"
+          cat deploy/settings.xml > "$HOME/.m2/settings.xml"
+        working-directory: .
 
-      # Read version from pom.xml (handles parent inheritance too)
-      - name: Read version from pom.xml
-        id: ver
+      - name: Install & test
+        run: mvn clean install
+        working-directory: .
+
+      # Read pom.xml version once, then export to $GITHUB_ENV
+      # so we DON'T repeat TF_VAR_docker_image in multiple steps
+      - name: Export Maven version to Terraform (TF_VAR_docker_image)
         run: |
           VERSION=$(mvn -q -DforceStdout help:evaluate -Dexpression=project.version)
-          SHORT_SHA="${GITHUB_SHA::7}"
-          echo "version=$VERSION" >> $GITHUB_OUTPUT
-          echo "short_sha=$SHORT_SHA" >> $GITHUB_OUTPUT
-          echo "VERSION=$VERSION" >> $GITHUB_ENV
-          echo "SHORT_SHA=$SHORT_SHA" >> $GITHUB_ENV
+          echo "TF_VAR_docker_image=$VERSION" >> "$GITHUB_ENV"
+          echo "Maven version: $VERSION"
+        working-directory: .
 
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
-
-      - name: Log in to Docker Hub
-        uses: docker/login-action@v3
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2
         with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
+          terraform_version: 1.11.2
 
-      - name: Build
-        run: mvn clean install
+      - name: Terraform Init
+        run: terraform init
 
-      - name: Build and push
-        uses: docker/build-push-action@v6
-        with:
-          context: .
-          file: ./Dockerfile
-          push: true
-          tags: |
-            ${{ secrets.DOCKERHUB_USERNAME }}/bakery-user-service:${{ steps.ver.outputs.version }}
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
+      - name: Terraform Plan
+        run: terraform plan -out=tfplan
+
+      - name: Terraform Apply
+        run: terraform apply -auto-approve tfplan

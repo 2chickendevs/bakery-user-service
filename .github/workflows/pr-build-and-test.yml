@@ -1,10 +1,8 @@
 name: Build and Test On PRs
 
 on:
-  push:
-    branches: [ "main" ] 
   pull_request:
-    branches: [ "main" ]
+    branches: [develop, staging, production]
 
 env:
   GITHUB_REGISTRY_USER: ${{secrets.GHRC_USER}}
@@ -16,7 +14,6 @@ jobs:
     permissions:
       contents: read
       packages: read
-      id-token: write  # Required for authentication
 
     steps:
       - name: Checkout the repository

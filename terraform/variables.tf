@@ -16,13 +16,13 @@ variable "health_check_path" {
   default     = "/bakery-user-service/api/health-check"
 }
 
-variable "ssm_env_path" {
+variable "env" {
   type        = string
-  description = "SSM path where env vars are stored, e.g. /bakery/dev"
-  default     = "/bakery/dev"
+  description = "Current deployed environment"
+  default     = "staging"
 }
 
-variable "env" {
+variable "env_docker" {
   type        = map(string)
   description = "Extra env vars / overrides"
   default     = {}

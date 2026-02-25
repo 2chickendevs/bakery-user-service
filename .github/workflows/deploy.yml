@@ -2,63 +2,70 @@ name: Terraform CI/CD Pipeline
 
 on:
   push:
-    branches: [develop, production]
+    branches: [production]
 
 jobs:
   terraform:
     runs-on: ubuntu-latest
+
     permissions:
-      contents: read # Allows the workflow to read repository content.
-      packages: read # Allows the workflow to pull packages from GitHub Packages (GHCR).
+      contents: read
+      packages: read
+
+    defaults:
+      run:
+        working-directory: terraform
 
     env:
-      GITHUB_REGISTRY_USER: ${{secrets.GHRC_USER}}
-      GITHUB_REGISTRY_TOKEN: ${{secrets.GHRC_TOKEN}}
+      GITHUB_REGISTRY_USER: ${{ secrets.GHRC_USER }}
+      GITHUB_REGISTRY_TOKEN: ${{ secrets.GHRC_TOKEN }}
+
       TF_VAR_env: ${{ github.ref_name }}
 
-      AWS_ACCESS_KEY_ID: |-
-        ${{ case(
-          github.ref_name == 'production', secrets.AWS_ACCESS_KEY_ID_PROD,
-          github.ref_name == 'staging', secrets.AWS_ACCESS_KEY_ID_STAGING,
-          github.ref_name == 'develop', secrets.AWS_ACCESS_KEY_ID_DEV,
-          'unknown'
-        ) }}
-      AWS_SECRET_ACCESS_KEY: |-
-        ${{ case(
-          github.ref_name == 'production', secrets.AWS_SECRET_ACCESS_KEY_PROD,
-          github.ref_name == 'staging', secrets.AWS_SECRET_ACCESS_KEY_STAGING,
-          github.ref_name == 'develop', secrets.AWS_SECRET_ACCESS_KEY_DEV,
-          'unknown'
-        ) }}
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID_PROD }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY_PROD }}
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v4
 
       - name: Set up Java 25
         uses: actions/setup-java@v4
         with:
-          java-version: '25'
-          distribution: 'temurin'
+          java-version: "25"
+          distribution: "temurin"
           cache: maven
 
-      - name: Update the settings.yml file
-        run: cat deploy/settings.xml > $HOME/.m2/settings.xml
+      - name: Maven settings.xml
+        run: |
+          mkdir -p "$HOME/.m2"
+          cat deploy/settings.xml > "$HOME/.m2/settings.xml"
+        working-directory: .
 
       - name: Install & test
         run: mvn clean install
+        working-directory: .
 
-      - uses: hashicorp/setup-terraform@v2
+      # Read pom.xml version once, then export to $GITHUB_ENV
+      # so we DON'T repeat TF_VAR_docker_image in multiple steps
+      - name: Export Maven version to Terraform (TF_VAR_docker_image)
+        run: |
+          VERSION=$(mvn -q -DforceStdout help:evaluate -Dexpression=project.version)
+          echo "DOCKER_IMAGE_VERSION=$VERSION" >> "$GITHUB_ENV"
+          echo "TF_VAR_docker_image=$VERSION" >> "$GITHUB_ENV"
+          echo "Maven version: $VERSION"
+        working-directory: .
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2
         with:
           terraform_version: 1.11.2
 
       - name: Terraform Init
         run: terraform init
-        working-directory: terraform
 
       - name: Terraform Plan
         run: terraform plan -out=tfplan
-        working-directory: terraform
 
       - name: Terraform Apply
         run: terraform apply -auto-approve tfplan
-        working-directory: terraform

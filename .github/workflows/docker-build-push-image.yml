@@ -2,7 +2,7 @@ name: Terraform CI/CD Pipeline
 
 on:
   push:
-    branches: [production]
+    branches: [develop]
 
 jobs:
   terraform:

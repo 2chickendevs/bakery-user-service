@@ -1,6 +1,7 @@
 variable "docker_image" {
   type        = string
   description = "Docker image, e.g. username/repo:tag"
+  default = "nntan041299/bakery-user-service:0.0.1-SNAPSHOT"
 }
 
 variable "app_port" {

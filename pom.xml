@@ -5,11 +5,11 @@
     <parent>
         <groupId>com.twochickendevs</groupId>
         <artifactId>bakery-parent-lib</artifactId>
-        <version>0.0.1-SNAPSHOT</version>
+        <version>0.0.1</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <artifactId>bakery-user-service</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.0.1</version>
 	<name>bakery-user-service</name>
 	<description>Authentication Service</description>
 	<properties>

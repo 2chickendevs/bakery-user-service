@@ -51,9 +51,12 @@ jobs:
       - name: Export Maven version to Terraform (TF_VAR_docker_image)
         run: |
           VERSION=$(mvn -q -DforceStdout help:evaluate -Dexpression=project.version)
-          echo "DOCKER_IMAGE_VERSION=$VERSION" >> "$GITHUB_ENV"
-          echo "TF_VAR_docker_image=$VERSION" >> "$GITHUB_ENV"
+          IMAGE="nntan041299/bakery-user-service:$VERSION"
+
+          echo "TF_VAR_docker_image=$IMAGE" >> "$GITHUB_ENV"
+
           echo "Maven version: $VERSION"
+          echo "Docker image: $IMAGE"
         working-directory: .
 
       - name: Setup Terraform

@@ -1,0 +1,17 @@
+name: Pull request to develop
+
+on:
+  pull_request:
+    branches:
+      - develop
+    types: [opened, synchronize, reopened]
+
+permissions:
+  contents: write
+  pull-requests: write
+  packages: read
+
+jobs:
+  maven-build:
+    uses: ./.github/workflows/maven-build.yml
+    secrets: inherit

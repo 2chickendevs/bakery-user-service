@@ -1,0 +1,47 @@
+name: Bump Snapshot Version In Develop Branch
+on:
+  push:
+    branches:
+      - production
+
+permissions:
+  contents: write
+  packages: write
+
+jobs:
+  bump-version-develop:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout develop branch
+        uses: actions/checkout@v4
+        with:
+          ref: develop
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 25
+
+      - name: Get current project version
+        id: get_version
+        run: |
+          VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+
+      - name: Bump snapshot version
+        run: |
+          VERSION=${{ steps.get_version.outputs.version }}
+          BASE=${VERSION%-SNAPSHOT}
+          IFS='.' read -r MAJOR MINOR PATCH <<< "$BASE"
+          PATCH=$((PATCH + 1))
+          NEW_VERSION="$MAJOR.$MINOR.$PATCH-SNAPSHOT"
+          mvn versions:set -DnewVersion=$NEW_VERSION -DgenerateBackupPoms=false
+
+      - name: Commit and push
+        run: |
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git add pom.xml
+          git commit -m "Bump new version to $NEW_VERSION"
+          git push origin develop

@@ -1,0 +1,10 @@
+name: Build & Push Docker (develop, staging)
+
+on:
+  push:
+    branches: [develop]
+
+jobs:
+  docker-build-push:
+    uses: ./.github/workflows/docker-build-push.yml
+    secrets: inherit

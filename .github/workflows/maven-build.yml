@@ -1,0 +1,47 @@
+name: Maven Build
+
+on:
+  workflow_call:
+    inputs:
+      remove_snapshot:
+        required: false
+        type: boolean
+        default: false
+
+env:
+  GITHUB_REGISTRY_USER: ${{ secrets.GHRC_USER }}
+  GITHUB_REGISTRY_TOKEN: ${{ secrets.GHRC_TOKEN }}
+
+permissions:
+  contents: read
+  packages: read
+
+jobs:
+  maven-build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v4
+
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          java-version: 25
+          distribution: temurin
+          cache: maven
+
+      - name: Maven settings.xml
+        run: |
+          mkdir -p "$HOME/.m2"
+          cat .github/deploy/settings.xml > "$HOME/.m2/settings.xml"
+
+      - name: Remove -SNAPSHOT from pom files
+        if: inputs.remove_snapshot
+        run: |
+          find . -name pom.xml -type f -print0 | while IFS= read -r -d '' file; do
+            sed -i 's/-SNAPSHOT</</g' "$file"
+          done
+
+      - name: Build with Maven
+        run: mvn -B -ntp clean install

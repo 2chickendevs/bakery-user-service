@@ -1,0 +1,20 @@
+name: Validate develop -> staging
+
+on:
+  pull_request:
+    branches:
+      - staging
+      - production
+    types: [opened, synchronize, reopened]
+
+permissions:
+  contents: write
+  pull-requests: write
+  packages: read
+
+jobs:
+  maven-build:
+    uses: ./.github/workflows/maven-build.yml
+    with:
+      remove_snapshot: true
+    secrets: inherit

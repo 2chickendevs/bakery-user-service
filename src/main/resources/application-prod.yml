@@ -1,7 +1,7 @@
 server:
   servlet:
     context-path: /bakery-user-service/api
-  port: 8080
+  port: 8081
 
 db:
   host: ${DB_HOST}
@@ -70,3 +70,13 @@ allowed:
 jwt:
   secret: ${JWT_SECRET}
   expiration-ms: ${JWT_EXPIRATION_MS:86400000}
+
+eureka:
+  instance:
+    hostname: ${HOST_NAME}
+  client:
+    serviceUrl:
+      defaultZone: http://${EUREKA_HOST}:${EUREKA_PORT}/eureka/
+    registry-fetch-interval-seconds: ${REGISTRY_FETCH_INTERVAL_SECONDS:30}
+    initial-instance-info-replication-interval-seconds: ${INITIAL_INSTANCE_INFO_REPLICATION_INTERVAL_SECONDS:40}
+    instance-info-replication-interval-seconds: ${INSTANCE_INFO_REPLICATION_INTERVAL_SECONDS:30}

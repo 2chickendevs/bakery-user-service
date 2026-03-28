@@ -15,15 +15,16 @@ CREATE TABLE users (
 );
 
 CREATE TABLE tokens (
-	id SERIAL PRIMARY KEY NOT NULL,
+    id SERIAL PRIMARY KEY NOT NULL,
 
     user_id INTEGER NOT NULL,
-	token TEXT NOT NULL,
+    token TEXT NOT NULL,
 
-	created_at TIMESTAMP,
+    created_at TIMESTAMP,
     created_by VARCHAR(50),
     updated_at TIMESTAMP,
     updated_by VARCHAR(50),
 
     CONSTRAINT unique_tokens_user UNIQUE (user_id, token)
 );
+

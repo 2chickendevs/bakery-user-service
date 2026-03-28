@@ -56,13 +56,16 @@ spring:
             scope: profile email
             redirect-uri: ${GOOGLE_OAUTH2_REDIRECT_URL}
 
-flyway:
-  enabled: true
-  baseline-on-migrate: true
-  schemas: public
-  url: jdbc:postgresql://${db.host}:${db.port}/${db.name}
-  user: ${db.username}
-  password: ${db.password}
+  flyway:
+    enabled: true
+    baseline-on-migrate: true
+    schemas: user_schema
+    default-schema: user_schema
+    locations: classpath:db/migration/user
+    table: flyway_schema_history_user
+    url: jdbc:postgresql://${db.host}:${db.port}/${db.name}
+    user: ${db.username}
+    password: ${db.password}
 
 allowed:
   urls: ${ALLOWED_ORIGIN:https://your-frontend-domain.com}

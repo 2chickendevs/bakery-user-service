@@ -1,18 +1,18 @@
 version: '3.8'
 
 services:
-  bakery-user-db:
+  bakery-db:
     image: postgres:16.11-alpine
-    container_name: bakery-user-db
+    container_name: bakery-db
     restart: unless-stopped
     environment:
       POSTGRES_USER: admin
       POSTGRES_PASSWORD: admin
-      POSTGRES_DB: bakery-user-db
+      POSTGRES_DB: bakery-db
     ports:
       - "5432:5432"
     volumes:
-      - bakery_user_db:/var/lib/postgresql/data
+      - bakery_db:/var/lib/postgresql/data
 
   bakery-eureka-service:
     image: nntan041299/bakery-eureka-service:0.0.1-SNAPSHOT
@@ -29,7 +29,7 @@ services:
     ports:
       - "8081:8081"
     depends_on:
-      - bakery-user-db
+      - bakery-db
       - bakery-eureka-service
     environment:
       HOST_NAME: bakery-user-service
@@ -58,4 +58,4 @@ services:
       INSTANCE_INFO_REPLICATION_INTERVAL_SECONDS: 2
 
 volumes:
-  bakery_user_db:
+  bakery_db:

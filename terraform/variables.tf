@@ -7,7 +7,7 @@ variable "docker_image" {
 variable "app_port" {
   type        = number
   description = "App port exposed by container AND used by ALB target group"
-  default     = 8081
+  default     = 8083
 }
 
 variable "health_check_path" {
